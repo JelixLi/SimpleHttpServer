@@ -7,12 +7,19 @@
 #include <deque>
 #include <map>
 
+// encapsulation  of  the  pthread mutex 
 class RCThreadMutex;
-class RCJob;
-class RCThread;
+// base class of all sepcific jobs ( which you want to do in the thread)  
+class RCJob;		
+//base class of  all  threads
+class RCThread;		
+//subclass which exteends from the RCThread and it represents for all specific work thread 
 class RCWorkerThread;
+//encapsulation of pthread cond
 class RCThreadCond;
+//implementation  of  the  thread pool
 class RCThreadPool;
+//manager class which hide the inside implementation
 class RCThreadManager;
 
 
@@ -30,7 +37,7 @@ public:
 	void setJobName(std::string& name){ JobName=name; }
 	std::string getJobName() const { return JobName; }
 
-	void *(*handler)(void*);
+	void *(*handler)(void*);  // the working function
 protected:
 	std::string JobName;
 	int JobID;
@@ -149,7 +156,7 @@ public:
 	RCThreadManager(int maxsize);
 	~RCThreadManager(){}
 
-	void Run(RCJob& this_job);
+	void Run(RCJob& this_job);  // the working function
 private:
 	RCThreadPool pool;
 };
