@@ -32,6 +32,7 @@ RCThreadPool::RCThreadPool():m_InitNum(10),idlesize(10),busysize(0){}
 
 RCThreadPool::RCThreadPool(int maxsize):m_InitNum(maxsize),idlesize(maxsize),busysize(0){}
 
+// create guard threads (which monitor the thread pool and recyle the leisure thread)
 void RCThreadPool::InitGuard()
 {
 	RCWorkerThread *temp=new RCWorkerThread(*(new RCThreadCond()),*(new RCThreadMutex()));
@@ -42,12 +43,13 @@ void RCThreadPool::InitGuard()
 	temp->Start();
 }
 
+// implementation of the guard thread
 void *RCThreadPool::GuardThread(void *argv)
 {
 	RCThreadPool *pool=(RCThreadPool*)argv;
 	while(1)
 	{
-		sleep(5);
+		sleep(5);  // scan the busy list every 5 seconds
 		pool->BusyMutex.lock();
 		if(pool->BusyList.size())
 		{
@@ -78,6 +80,7 @@ int RCThreadPool::getBusySize()
 	return size;
 }
 
+// create init_num thread
 void RCThreadPool::CreateThreadPool()
 {
 	for(int i=0;i<m_InitNum;i++)
@@ -116,6 +119,7 @@ void RCThreadPool::MoveToBusyList(RCWorkerThread* t)
 	BusyMutex.unlock();
 }
 
+// add new job to the thread_pool
 void RCThreadPool::AddJob(RCJob& this_job)
 {
 	IdleMutex.lock();
