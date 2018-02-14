@@ -305,6 +305,16 @@ struct conf_opts Configure::opt={
 0,  //Timeout
 };
 
+// struct conf_opts Configure::opt={
+// "/home/jieli/code/SHTTPD/www/cgi_bin",  //CGIRoot
+// "index.html", //DefaultFile
+// "/home/admin/SimpleHttpServer/www", //DocumentRoot
+// "/home/admin/SimpleHttpServer/shttpd.conf", //ConfigFile
+// 80, //ListenPort
+// 20,  //MaxClient
+// 0,  //Timeout
+// };
+
 Configure::Configure()
 {
 	opt.InitClient=5;
